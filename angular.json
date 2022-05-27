@@ -5,6 +5,7 @@
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "core-data": "libs/core-data",
+    "core-state": "libs/core-state",
     "hktodolist": "apps/hktodolist",
     "hktodolist-e2e": "apps/hktodolist-e2e"
   }

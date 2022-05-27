@@ -20,11 +20,9 @@ export class TodosService {
 		return this.lowdbService.add<Todo>(createTodoDto, this.collectionName);
 	}
 
-	async findAll(): Promise<FullTodo[]> {
+	async findAll(): Promise<Todo[]> {
 		const todos = await this.lowdbService.findAll<Todo>(this.collectionName);
-		const tasks = await this.taskService.findAll();
-		const tasksMap = groupBy(prop('todoId'), tasks);
-		return todos.map((todo) => ({ ...todo, tasks: tasksMap[todo.id] }));
+		return todos;
 	}
 
 	findOne(id: string): Promise<Todo> {

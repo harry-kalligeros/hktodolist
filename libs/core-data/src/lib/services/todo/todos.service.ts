@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { endpoints } from '../../endpoints';
-import { FullTodo } from '@hktodolist/api-interfaces';
+import { Todo } from '@hktodolist/api-interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class TodoService {
-	private API = endpoints.TODO_API;
+export class TodosService {
+	private API = endpoints.TODOS_API;
 	constructor(private http: HttpClient) {}
 
 	/**
 	 * Fetches all todos
 	 */
-	all(): Observable<FullTodo[]> {
-		return this.http.get<FullTodo[]>(this.getUrl());
+	all(): Observable<Todo[]> {
+		return this.http.get<Todo[]>(this.getUrl());
 	}
 
 	private getUrl() {

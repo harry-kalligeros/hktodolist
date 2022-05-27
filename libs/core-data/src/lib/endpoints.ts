@@ -1,4 +1,4 @@
 export const endpoints = {
-	TODO_API: '/api/todos',
-	TASK_API: '/api/task',
+	TODOS_API: '/api/todos',
+	TASKS_API: '/api/tasks',
 };
