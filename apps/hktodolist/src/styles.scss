@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~bulmaswatch/flatly/variables';
+@import '~bulma/bulma';
+@import '~bulmaswatch/flatly/overrides';
+
+.hk-with-hover {
+  &:hover {
+    color: $warning;
+  }
+}
