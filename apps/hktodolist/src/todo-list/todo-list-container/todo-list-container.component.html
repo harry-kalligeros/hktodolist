@@ -1,0 +1,9 @@
+<ng-container *ngIf="todoItems$|async as todoItems">
+  <hk-todo-list [todos]="todoItems"></hk-todo-list>
+</ng-container>
+<button class="button is-primary is-outlined mt-2">
+  <span class="icon">
+    <fa-icon [icon]="faPlusCircle"></fa-icon>
+  </span>
+  <span>Add todo</span>
+</button>

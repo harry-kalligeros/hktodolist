@@ -1,0 +1,20 @@
+<form [formGroup]="todoFormGroup">
+  <div class="field">
+    <label class="label">Name</label>
+    <div class="control"><input type="text" class="input" formControlName="name" placeholder="Fill in your {{itemType}} name"></div>
+  </div>
+  <div class="field">
+    <label class="label">Description</label>
+    <div class="control">
+      <textarea class="textarea" placeholder="Fill in your {{itemType}} description"></textarea>
+    </div>
+  </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-primary">{{actionType}} {{itemType}}</button>
+    </div>
+    <div class="control">
+      <button class="button is-link is-light">Cancel</button>
+    </div>
+  </div>
+</form>
