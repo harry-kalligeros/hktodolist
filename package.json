@@ -10,7 +10,8 @@
     "test": "nx test",
     "serve:web": "nx run hktodolist:serve --open",
     "serve:api": "nx run api:serve",
-    "serve:all": "run-p serve:web serve:api"
+    "serve:all": "run-p serve:web serve:api",
+    "app:storybook": "nx run hktodolist:storybook"
   },
   "private": true,
   "dependencies": {
