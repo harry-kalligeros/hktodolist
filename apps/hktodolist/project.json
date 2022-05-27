@@ -1,7 +1,7 @@
 {
   "projectType": "application",
   "sourceRoot": "apps/hktodolist/src",
-  "prefix": "hktodolist",
+  "prefix": "hk",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -13,10 +13,7 @@
         "polyfills": "apps/hktodolist/src/polyfills.ts",
         "tsConfig": "apps/hktodolist/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/hktodolist/src/favicon.ico",
-          "apps/hktodolist/src/assets"
-        ],
+        "assets": ["apps/hktodolist/src/favicon.ico", "apps/hktodolist/src/assets"],
         "styles": ["apps/hktodolist/src/styles.scss"],
         "scripts": []
       },
@@ -77,10 +74,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/hktodolist/**/*.ts",
-          "apps/hktodolist/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/hktodolist/**/*.ts", "apps/hktodolist/**/*.html"]
       }
     },
     "test": {
@@ -89,6 +83,35 @@
       "options": {
         "jestConfig": "apps/hktodolist/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/hktodolist/.storybook",
+        "browserTarget": "hktodolist:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputDir": "dist/storybook/hktodolist",
+        "configDir": "apps/hktodolist/.storybook",
+        "browserTarget": "hktodolist:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
       }
     }
   },
