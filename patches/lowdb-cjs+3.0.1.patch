@@ -1,0 +1,26 @@
+diff --git a/node_modules/lowdb-cjs/lib/adapters/TextFile.js b/node_modules/lowdb-cjs/lib/adapters/TextFile.js
+index f026284..c5615e3 100644
+--- a/node_modules/lowdb-cjs/lib/adapters/TextFile.js
++++ b/node_modules/lowdb-cjs/lib/adapters/TextFile.js
+@@ -25,7 +25,7 @@ class TextFile {
+     async read() {
+         let data;
+         try {
+-            data = await fs_1.default.promises.readFile(__classPrivateFieldGet(this, _TextFile_filename, "f"), 'utf-8');
++            data = await fs_1.promises.readFile(__classPrivateFieldGet(this, _TextFile_filename, "f"), 'utf-8');
+         }
+         catch (e) {
+             if (e.code === 'ENOENT') {
+diff --git a/node_modules/lowdb-cjs/lib/steno.js b/node_modules/lowdb-cjs/lib/steno.js
+index 092efcb..097d1ec 100644
+--- a/node_modules/lowdb-cjs/lib/steno.js
++++ b/node_modules/lowdb-cjs/lib/steno.js
+@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Writer = void 0;
+ const fs_1 = require("fs");
+ const path_1 = require("path");
++path_1.default = path_1;
++fs_1.default = fs_1;
+ // Returns a temporary file
+ // Example: for /some/file will return /some/.file.tmp
+ function getTempFilename(file) {
