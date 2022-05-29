@@ -9,6 +9,7 @@ import { TasksFacade } from './tasks/tasks.facade';
 import { reducers } from './reducers';
 import { StoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../../../apps/hktodolist/src/environments/environment';
+import { ApiEffects } from './api.effects';
 
 const STORE_NAME = 'todo-store';
 const storeConfig: RootStoreConfig<any, any> = {
@@ -24,7 +25,7 @@ const storeConfig: RootStoreConfig<any, any> = {
 	imports: [
 		CommonModule,
 		StoreModule.forRoot(reducers, storeConfig),
-		EffectsModule.forRoot([TodosEffects, TasksEffects]),
+		EffectsModule.forRoot([TodosEffects, TasksEffects, ApiEffects]),
 		StoreDevtoolsModule.instrument({
 			maxAge: 25, // Retains last 25 states
 			logOnly: environment.production, // Restrict extension to log-only mode

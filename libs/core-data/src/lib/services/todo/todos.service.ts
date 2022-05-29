@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { endpoints } from '../../endpoints';
 import { Patched, Todo } from '@hktodolist/api-interfaces';
-import { map, Observable } from 'rxjs';
+import { map, Observable, throwError } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',

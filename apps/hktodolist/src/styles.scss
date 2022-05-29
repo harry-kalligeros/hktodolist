@@ -2,6 +2,7 @@
 @import '~bulmaswatch/flatly/variables';
 @import '~bulma/bulma';
 @import '~bulmaswatch/flatly/overrides';
+@import "~@angular/cdk/overlay-prebuilt.css";
 
 .hk-with-hover {
   &:hover {

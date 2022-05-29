@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FullTodo, Task, Todo, ViewMode, UpsertPayload, Facade, DeletePayload } from '@hktodolist/api-interfaces';
+import { DeletePayload, Facade, FullTodo, Task, Todo, UpsertPayload, ViewMode } from '@hktodolist/api-interfaces';
 import { Observable } from 'rxjs';
 import { TasksFacade, TodosFacade } from '@hktodolist/core-state';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';

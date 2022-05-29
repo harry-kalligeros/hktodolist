@@ -41,3 +41,10 @@ interface DataUpdate<T> {
 }
 
 export type Patched<T> = T & DataUpdate<T>;
+
+export interface ToastData {
+	text: string;
+	type: ToastType;
+}
+
+export type ToastType = 'is-danger' | 'is-info' | 'is-success';
