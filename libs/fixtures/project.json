@@ -1,0 +1,22 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/fixtures/src",
+  "prefix": "hktodolist",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/fixtures"],
+      "options": {
+        "jestConfig": "libs/fixtures/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/fixtures/**/*.ts", "libs/fixtures/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

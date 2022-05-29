@@ -6,7 +6,9 @@
     "api-interfaces": "libs/api-interfaces",
     "core-data": "libs/core-data",
     "core-state": "libs/core-state",
+    "fixtures": "libs/fixtures",
     "hktodolist": "apps/hktodolist",
-    "hktodolist-e2e": "apps/hktodolist-e2e"
+    "hktodolist-e2e": "apps/hktodolist-e2e",
+    "shared": "libs/shared"
   }
 }

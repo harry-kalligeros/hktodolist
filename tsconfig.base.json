@@ -17,7 +17,9 @@
     "paths": {
       "@hktodolist/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@hktodolist/core-data": ["libs/core-data/src/index.ts"],
-      "@hktodolist/core-state": ["libs/core-state/src/index.ts"]
+      "@hktodolist/core-state": ["libs/core-state/src/index.ts"],
+      "@hktodolist/fixtures": ["libs/fixtures/src/index.ts"],
+      "@hktodolist/shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
