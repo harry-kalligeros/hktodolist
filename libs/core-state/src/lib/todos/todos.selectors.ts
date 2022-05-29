@@ -24,3 +24,9 @@ export const getSelected = createSelector(getTodosEntities, getSelectedId, (enti
 export const getAllFullTodos = createSelector(getAllTodos, getAllTasks, (todos, allTasks) =>
 	todos.map((todo) => ({ ...todo, tasks: allTasks.filter((task) => task.todoId === todo.id) }))
 );
+
+export const getTasksOfSelectedTodo = createSelector(getSelectedId, getAllTasks, (selectedId, allTasks) =>
+	allTasks.filter((task) => task.todoId === selectedId)
+);
+
+export const getViewMode = createSelector(getTodosState, (state: State) => state.viewMode);

@@ -1,9 +1,39 @@
-<ng-container *ngIf="todoItems$|async as todoItems">
-  <hk-todo-list [todos]="todoItems"></hk-todo-list>
-</ng-container>
-<button class="button is-primary is-outlined mt-2">
-  <span class="icon">
-    <fa-icon [icon]="faPlusCircle"></fa-icon>
-  </span>
-  <span>Add todo</span>
-</button>
+<section class="section">
+  <div class="columns">
+    <div class="column">
+      <hk-item-list [items$]="todos$"
+                    type="todo"
+                    [selectedId]="selectedTodoId$|async"
+                    (itemSelected)="selectTodoHandler($event)"
+                    (toggleMode)="toggleViewMode($event, 'todo')"
+
+      >
+      </hk-item-list>
+      <ng-container *ngTemplateOutlet="editForm; context:{$implicit: todoViewMode$, 'type':'todo', 'selectedItem$':selectedTodo$}"></ng-container>
+    </div>
+    <div class="column">
+      <hk-item-list *ngIf="selectedTodoId$|async"
+                    [items$]="tasks$"
+                    type="task"
+                    [selectedId]="selectedTaskId$|async"
+                    (itemSelected)="selectTaskHandler($event)"
+                    (toggleMode)="toggleViewMode($event, 'task')"
+      >
+        <span>for {{(selectedTodo$|async)?.name}}</span>
+      </hk-item-list>
+      <ng-container *ngTemplateOutlet="editForm; context:{$implicit: taskViewMode$, 'type':'task', 'selectedItem$':selectedTask$}"></ng-container>
+    </div>
+  </div>
+</section>
+<ng-template #editForm let-viewmode$ let-selectedItem$="selectedItem$" let-type="type">
+  <ng-container *ngIf="viewmode$|async as viewMode">
+    <hk-todo-form [viewMode]="viewMode" [selectedItem]="selectedItem$|async" [itemType]="type"></hk-todo-form>
+    <button class="button is-primary is-outlined mt-2" *ngIf="viewMode==='view'">
+          <span class="icon">
+            <fa-icon [icon]="faPlusCircle"></fa-icon>
+          </span>
+      <span>Add {{type}}</span>
+    </button>
+  </ng-container>
+</ng-template>
+

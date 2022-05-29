@@ -2,24 +2,31 @@ import { TasksEntity } from './tasks.models';
 import { tasksAdapter, TasksPartialState, initialState } from './tasks.reducer';
 import * as TasksSelectors from './tasks.selectors';
 
+export const createTasksEntity = (id: string, todoId: string, name = '', description = '') =>
+	({
+		id,
+		todoId,
+		name: name || `name-${id}`,
+		description: description || `description-${id}`,
+	} as TasksEntity);
+
 describe('Tasks Selectors', () => {
 	const ERROR_MSG = 'No Error Available';
 	const getTasksId = (it: TasksEntity) => it.id;
-	const createTasksEntity = (id: string, name = '') =>
-		({
-			id,
-			name: name || `name-${id}`,
-		} as TasksEntity);
 
 	let state: TasksPartialState;
 
 	beforeEach(() => {
 		state = {
 			tasks: tasksAdapter.setAll(
-				[createTasksEntity('PRODUCT-AAA'), createTasksEntity('PRODUCT-BBB'), createTasksEntity('PRODUCT-CCC')],
+				[
+					createTasksEntity('TASK-AAA', 'id1'),
+					createTasksEntity('TASK-BBB', 'id2'),
+					createTasksEntity('TASK-CCC', 'id3'),
+				],
 				{
 					...initialState,
-					selectedId: 'PRODUCT-BBB',
+					selectedId: 'TASK-BBB',
 					error: ERROR_MSG,
 					loaded: true,
 				}
@@ -33,14 +40,14 @@ describe('Tasks Selectors', () => {
 			const selId = getTasksId(results[1]);
 
 			expect(results.length).toBe(3);
-			expect(selId).toBe('PRODUCT-BBB');
+			expect(selId).toBe('TASK-BBB');
 		});
 
 		it('getSelected() should return the selected Entity', () => {
 			const result = TasksSelectors.getSelected(state) as TasksEntity;
 			const selId = getTasksId(result);
 
-			expect(selId).toBe('PRODUCT-BBB');
+			expect(selId).toBe('TASK-BBB');
 		});
 
 		it('getTasksLoaded() should return the current "loaded" status', () => {

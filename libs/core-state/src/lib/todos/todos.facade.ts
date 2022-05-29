@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { select, Store, Action } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
 import * as TodosActions from './todos.actions';
-import * as TodosFeature from './todos.reducer';
 import * as TodosSelectors from './todos.selectors';
 import { Observable } from 'rxjs';
-import { FullTodo } from '@hktodolist/api-interfaces';
+import { FullTodo, Task, Todo, ViewMode } from '@hktodolist/api-interfaces';
 
 @Injectable()
 export class TodosFacade {
@@ -15,9 +14,11 @@ export class TodosFacade {
 	 */
 	loaded$ = this.store.pipe(select(TodosSelectors.getTodosLoaded));
 	allTodos$ = this.store.pipe(select(TodosSelectors.getAllTodos));
-	selectedTodos$ = this.store.pipe(select(TodosSelectors.getSelected));
+	selectedTodo$: Observable<Todo | undefined> = this.store.pipe(select(TodosSelectors.getSelected));
+	selectedTodoId$: Observable<string | null | undefined> = this.store.pipe(select(TodosSelectors.getSelectedId));
 	allFullTodos$: Observable<FullTodo[]> = this.store.pipe(select(TodosSelectors.getAllFullTodos));
-
+	tasks$: Observable<Task[]> = this.store.select(TodosSelectors.getTasksOfSelectedTodo);
+	viewMode$: Observable<ViewMode> = this.store.select(TodosSelectors.getViewMode);
 	constructor(private readonly store: Store) {}
 
 	/**
@@ -26,5 +27,13 @@ export class TodosFacade {
 	 */
 	init() {
 		this.store.dispatch(TodosActions.init());
+	}
+
+	selectTodo(id: string) {
+		this.store.dispatch(TodosActions.selectTodo({ id }));
+	}
+
+	toggleViewMode(mode: ViewMode) {
+		this.store.dispatch(TodosActions.toggleViewMode({ viewMode: mode }));
 	}
 }

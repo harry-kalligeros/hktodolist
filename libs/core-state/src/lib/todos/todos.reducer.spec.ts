@@ -12,13 +12,20 @@ describe('Todos Reducer', () => {
 
 	describe('valid Todos actions', () => {
 		it('loadTodosSuccess should return the list of known Todos', () => {
-			const todos = [createTodosEntity('PRODUCT-AAA'), createTodosEntity('PRODUCT-zzz')];
+			const todos = [createTodosEntity('TODO-AAA'), createTodosEntity('TODO-zzz')];
 			const action = TodosActions.loadTodosSuccess({ todos });
 
 			const result: State = reducer(initialState, action);
 
 			expect(result.loaded).toBe(true);
 			expect(result.ids.length).toBe(2);
+		});
+
+		it('toggleViewMode should change the Todos view mode', () => {
+			const action = TodosActions.toggleViewMode({ viewMode: 'edit' });
+			const result: State = reducer(initialState, action);
+
+			expect(result.viewMode).toBe('edit');
 		});
 	});
 

@@ -19,3 +19,5 @@ export const getSelectedId = createSelector(getTasksState, (state: State) => sta
 export const getSelected = createSelector(getTasksEntities, getSelectedId, (entities, selectedId) =>
 	selectedId ? entities[selectedId] : undefined
 );
+
+export const getViewMode = createSelector(getTasksState, (state: State) => state.viewMode);

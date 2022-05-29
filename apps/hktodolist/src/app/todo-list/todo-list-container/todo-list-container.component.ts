@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TodosService } from '@hktodolist/core-data';
-import { FullTodo } from '@hktodolist/api-interfaces';
-import { EMPTY, Observable } from 'rxjs';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { FullTodo, Task, Todo, ViewMode } from '@hktodolist/api-interfaces';
+import { Observable } from 'rxjs';
 import { TasksFacade, TodosFacade } from '@hktodolist/core-state';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'hk-todo-list-container',
@@ -12,13 +11,43 @@ import { TasksFacade, TodosFacade } from '@hktodolist/core-state';
 })
 export class TodoListContainerComponent implements OnInit {
 	faPlusCircle = faPlusCircle;
-	todoItems$: Observable<FullTodo[]> = EMPTY;
+	todos$: Observable<FullTodo[]>;
+	tasks$: Observable<Task[]>;
+	selectedTodoId$: Observable<string | null | undefined>;
+	selectedTaskId$: Observable<string | null | undefined>;
+	selectedTodo$: Observable<Todo | undefined>;
+	selectedTask$: Observable<Task | undefined>;
+	todoViewMode$: Observable<ViewMode>;
+	taskViewMode$: Observable<ViewMode>;
+
 	constructor(private todosFacade: TodosFacade, private tasksFacade: TasksFacade) {
 		todosFacade.init();
 		tasksFacade.init();
 	}
 
 	ngOnInit(): void {
-		this.todoItems$ = this.todosFacade.allFullTodos$;
+		this.todos$ = this.todosFacade.allFullTodos$;
+		this.selectedTodoId$ = this.todosFacade.selectedTodoId$;
+		this.selectedTodo$ = this.todosFacade.selectedTodo$;
+		this.selectedTaskId$ = this.tasksFacade.selectedTaskId$;
+		this.selectedTask$ = this.tasksFacade.selectedTask$;
+		this.tasks$ = this.todosFacade.tasks$;
+		this.todoViewMode$ = this.todosFacade.viewMode$;
+		this.taskViewMode$ = this.tasksFacade.viewMode$;
+	}
+
+	selectTodoHandler(id: string) {
+		this.todosFacade.selectTodo(id);
+	}
+	selectTaskHandler(id: string) {
+		this.tasksFacade.selectTask(id);
+	}
+
+	toggleViewMode(mode: ViewMode, type: 'todo' | 'task') {
+		if (type === 'todo') {
+			this.todosFacade.toggleViewMode(mode);
+		} else {
+			this.tasksFacade.toggleViewMode(mode);
+		}
 	}
 }

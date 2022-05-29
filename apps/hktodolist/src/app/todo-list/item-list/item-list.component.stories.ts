@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { TodoListComponent } from './todo-list.component';
+import { ItemListComponent } from './item-list.component';
 import { IconsModule } from '../../icons/icons.module';
 
 export default {
 	title: 'Todo List',
-	component: TodoListComponent,
+	component: ItemListComponent,
 };
 
 export const primary = () => ({
 	moduleMetadata: {
 		imports: [CommonModule, IconsModule],
-		declarations: [TodoListComponent],
+		declarations: [ItemListComponent],
 	},
 	props: {
 		todos: [

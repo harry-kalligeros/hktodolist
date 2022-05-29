@@ -1,0 +1,35 @@
+<div class="panel is-primary">
+  <p class="panel-heading"><span>{{pluralMapping[type]|titlecase}}</span>
+    <span class="ml-1"><ng-content></ng-content></span>
+  </p>
+  <ng-container *ngIf="items$|async as items">
+    <ng-container *ngIf="items.length;else noItems">
+      <div class="panel-block hk-list-item"
+           *ngFor="let item of items; trackBy: trackByTodo">
+
+        <input type="radio" name="selectedItem" class="mr-3" [checked]="item.id===selectedId" [value]="item.id"
+               (change)="clickTodoHandler($event)">
+        <span class="hk-name">{{item.name}}</span>
+        <div class="hk-actions">
+          <a class="panel-icon mr-3" (click)="editItem(item.id);false">
+            <fa-icon [icon]="faPencil" [classes]="['hk-with-hover']"></fa-icon>
+          </a>
+          <a class="panel-icon">
+            <fa-icon [icon]="faTrash" [classes]="['hk-with-hover']"></fa-icon>
+          </a>
+          <a class="ml-4 panel-icon px-2" (click)="toggleItem(item.id);false">
+            <fa-icon [icon]="expandedState[item.id] ? faChevronDown: faChevronRight"
+                     [classes]="['hk-with-hover']"></fa-icon>
+          </a>
+        </div>
+        <div class="hk-description has-text-grey is-italic" @bodyExpansion *ngIf="expandedState[item.id]">{{item.description}}</div>
+
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<ng-template #noItems>
+  <div class="panel-block is-flex is-justify-content-center">
+    No {{pluralMapping[type]}} available
+  </div>
+</ng-template>

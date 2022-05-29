@@ -36,7 +36,8 @@ describe('TasksFacade', () => {
 				imports: [NxModule.forRoot(), StoreModule.forRoot({}), EffectsModule.forRoot([]), CustomFeatureModule],
 			})
 			class RootModule {}
-			TestBed.configureTestingModule({ imports: [RootModule] });
+
+			TestBed.configureTestingModule({ imports: [RootModule], teardown: { destroyAfterEach: false } });
 
 			store = TestBed.inject(Store);
 			facade = TestBed.inject(TasksFacade);

@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TodoFormComponent } from './todo-form.component';
+import { ItemFormComponent } from './item-form.component';
 
 export default {
 	title: 'Todo Form',
-	component: TodoFormComponent,
+	component: ItemFormComponent,
 };
 
 export const primary = () => ({
 	moduleMetadata: {
 		imports: [CommonModule, ReactiveFormsModule],
-		declarations: [TodoFormComponent],
+		declarations: [ItemFormComponent],
 	},
 	props: {},
 });

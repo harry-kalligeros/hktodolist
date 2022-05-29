@@ -17,3 +17,5 @@ export interface Task extends Todo {
 export interface FullTodo extends Todo {
 	tasks: Task[];
 }
+
+export type ViewMode = 'view' | 'edit' | 'add';

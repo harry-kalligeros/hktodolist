@@ -11,6 +11,9 @@ import { TodosFacade } from './todos.facade';
 import { TodosEntity } from './todos.models';
 import { TODOS_FEATURE_KEY, State, initialState, reducer } from './todos.reducer';
 import * as TodosSelectors from './todos.selectors';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { endpoints, TodosService } from '@hktodolist/core-data';
+import { todos } from '@hktodolist/fixtures';
 
 interface TestSchema {
 	todos: State;
@@ -19,9 +22,11 @@ interface TestSchema {
 describe('TodosFacade', () => {
 	let facade: TodosFacade;
 	let store: Store<TestSchema>;
-	const createTodosEntity = (id: string, name = ''): TodosEntity => ({
+	let httpMock: HttpTestingController;
+	const createTodosEntity = (id: string, name = '', description = ''): TodosEntity => ({
 		id,
 		name: name || `name-${id}`,
+		description: description || `description-${id}`,
 	});
 
 	describe('used in NgModule', () => {
@@ -33,13 +38,25 @@ describe('TodosFacade', () => {
 			class CustomFeatureModule {}
 
 			@NgModule({
-				imports: [NxModule.forRoot(), StoreModule.forRoot({}), EffectsModule.forRoot([]), CustomFeatureModule],
+				imports: [
+					NxModule.forRoot(),
+					StoreModule.forRoot({}),
+					EffectsModule.forRoot([]),
+					CustomFeatureModule,
+					HttpClientTestingModule,
+				],
+				providers: [TodosService],
 			})
 			class RootModule {}
 			TestBed.configureTestingModule({ imports: [RootModule] });
 
 			store = TestBed.inject(Store);
 			facade = TestBed.inject(TodosFacade);
+			httpMock = TestBed.inject(HttpTestingController);
+		});
+
+		afterEach(() => {
+			httpMock.verify();
 		});
 
 		/**
@@ -53,11 +70,13 @@ describe('TodosFacade', () => {
 			expect(isLoaded).toBe(false);
 
 			facade.init();
+			const request = httpMock.expectOne(endpoints.TODOS_API);
+			request.flush(todos);
 
 			list = await readFirst(facade.allTodos$);
 			isLoaded = await readFirst(facade.loaded$);
 
-			expect(list.length).toBe(0);
+			expect(list.length).toBe(2);
 			expect(isLoaded).toBe(true);
 		});
 
