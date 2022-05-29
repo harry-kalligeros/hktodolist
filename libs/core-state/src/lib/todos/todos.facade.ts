@@ -4,10 +4,10 @@ import { select, Store } from '@ngrx/store';
 import * as TodosActions from './todos.actions';
 import * as TodosSelectors from './todos.selectors';
 import { Observable } from 'rxjs';
-import { FullTodo, Task, Todo, ViewMode } from '@hktodolist/api-interfaces';
+import { Facade, FullTodo, Task, Todo, ViewMode } from '@hktodolist/api-interfaces';
 
 @Injectable()
-export class TodosFacade {
+export class TodosFacade implements Facade<Todo> {
 	/**
 	 * Combine pieces of state using createSelector,
 	 * and expose them as observables through the facade.
@@ -35,5 +35,17 @@ export class TodosFacade {
 
 	toggleViewMode(mode: ViewMode) {
 		this.store.dispatch(TodosActions.toggleViewMode({ viewMode: mode }));
+	}
+
+	addItem(todo: Todo) {
+		this.store.dispatch(TodosActions.addTodo({ todo }));
+	}
+
+	updateItem(todo: Todo) {
+		this.store.dispatch(TodosActions.setTodo({ todo }));
+	}
+
+	deleteItem(id: string) {
+		this.store.dispatch(TodosActions.deleteTodo({ id }));
 	}
 }

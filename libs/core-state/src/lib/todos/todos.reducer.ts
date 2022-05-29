@@ -33,7 +33,10 @@ const todosReducer = createReducer(
 	on(TodosActions.selectTodo, (state, { id }) => ({ ...state, selectedId: id })),
 	on(TodosActions.loadTodosSuccess, (state, { todos }) => todosAdapter.setAll(todos, { ...state, loaded: true })),
 	on(TodosActions.loadTodosFailure, (state, { error }) => ({ ...state, error })),
-	on(TodosActions.toggleViewMode, (state, { viewMode }) => ({ ...state, viewMode }))
+	on(TodosActions.toggleViewMode, (state, { viewMode }) => ({ ...state, viewMode })),
+	on(TodosActions.todoAddedSuccess, (state, { todo }) => todosAdapter.addOne(todo, state)),
+	on(TodosActions.todoUpdatedSuccess, (state, { todo }) => todosAdapter.setOne(todo, state)),
+	on(TodosActions.todoDeletedSuccess, (state, { id }) => todosAdapter.removeOne(id, state))
 );
 
 export function reducer(state: State | undefined, action: Action) {

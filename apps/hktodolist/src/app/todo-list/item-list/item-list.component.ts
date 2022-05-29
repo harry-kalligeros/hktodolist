@@ -7,7 +7,7 @@ import {
 	Output,
 	TrackByFunction,
 } from '@angular/core';
-import { FullTodo, Task, ViewMode } from '@hktodolist/api-interfaces';
+import { DeletePayload, FullTodo, Task, ViewMode } from '@hktodolist/api-interfaces';
 import { faChevronDown, faChevronRight, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { bodyExpansionNgIf } from '@hktodolist/shared';
@@ -20,7 +20,7 @@ type IterableItem = FullTodo | Task;
 	animations: [bodyExpansionNgIf('bodyExpansion')],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemListComponent implements OnInit {
+export class ItemListComponent {
 	faPencil = faPencil;
 	faTrash = faTrash;
 	faChevronRight = faChevronRight;
@@ -37,9 +37,7 @@ export class ItemListComponent implements OnInit {
 	@Input() selectedId: string | null | undefined = '';
 	@Output() itemSelected = new EventEmitter<string>();
 	@Output() toggleMode = new EventEmitter<ViewMode>();
-
-	constructor() {}
-	ngOnInit(): void {}
+	@Output() itemDeleted = new EventEmitter<DeletePayload>();
 
 	trackByTodo: TrackByFunction<FullTodo> = (index: number, item: FullTodo) => {
 		return item.id;
@@ -57,5 +55,13 @@ export class ItemListComponent implements OnInit {
 	editItem(id: string) {
 		this.itemSelected.emit(id);
 		this.toggleMode.emit('edit');
+	}
+
+	deleteItem(id: string) {
+		const payload: DeletePayload = {
+			type: this.type,
+			id,
+		};
+		this.itemDeleted.emit(payload);
 	}
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Todo, Task } from '@hktodolist/api-interfaces';
 
 @Injectable()
 export class ItemFormService {
@@ -25,12 +26,15 @@ export class ItemFormService {
 		}
 	}
 
-	public resetForm() {
-		const value = {
+	public resetForm(type: 'task' | 'todo', todoId: string | null | undefined) {
+		const value: Todo | Task = {
 			id: '',
 			name: '',
 			description: '',
 		};
+		if (type === 'task') {
+			(value as Task).todoId = todoId || '';
+		}
 		this.itemForm?.reset(value);
 	}
 }

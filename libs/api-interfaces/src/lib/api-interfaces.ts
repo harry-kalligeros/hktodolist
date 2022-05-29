@@ -19,3 +19,25 @@ export interface FullTodo extends Todo {
 }
 
 export type ViewMode = 'view' | 'edit' | 'add';
+
+export interface UpsertPayload {
+	viewMode: ViewMode;
+	item: Todo | Task;
+}
+
+export interface DeletePayload {
+	type: 'todo' | 'task';
+	id: string;
+}
+
+export interface Facade<T> {
+	addItem: (item: T) => void;
+	updateItem: (item: T) => void;
+	deleteItem: (id: string) => void;
+}
+
+interface DataUpdate<T> {
+	dataUpdate: T;
+}
+
+export type Patched<T> = T & DataUpdate<T>;

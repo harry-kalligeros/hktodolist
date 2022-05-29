@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { select, Store, Action } from '@ngrx/store';
-import { ViewMode } from 'libs/api-interfaces/src/lib/api-interfaces';
+import { select, Store } from '@ngrx/store';
+import { Facade, Task, ViewMode } from '@hktodolist/api-interfaces';
 
 import * as TasksActions from './tasks.actions';
-import * as TasksFeature from './tasks.reducer';
 import * as TasksSelectors from './tasks.selectors';
 
 @Injectable()
-export class TasksFacade {
+export class TasksFacade implements Facade<Task> {
 	/**
 	 * Combine pieces of state using createSelector,
 	 * and expose them as observables through the facade.
@@ -34,5 +33,17 @@ export class TasksFacade {
 
 	toggleViewMode(mode: ViewMode) {
 		this.store.dispatch(TasksActions.toggleViewMode({ viewMode: mode }));
+	}
+
+	addItem(item: Task) {
+		this.store.dispatch(TasksActions.addTask({ task: item }));
+	}
+
+	updateItem(item: Task) {
+		this.store.dispatch(TasksActions.setTask({ task: item }));
+	}
+
+	deleteItem(id: string) {
+		this.store.dispatch(TasksActions.deleteTask({ id }));
 	}
 }

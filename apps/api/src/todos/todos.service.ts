@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { LowdbService } from '../lowdb/lowdb.service';
-import { CollectionName, FullTodo, Todo } from '@hktodolist/api-interfaces';
+import { CollectionName, Todo } from '@hktodolist/api-interfaces';
 import { TaskService } from '../task/task.service';
-import { groupBy, prop } from 'ramda';
 
 @Injectable()
 export class TodosService {
@@ -34,7 +33,10 @@ export class TodosService {
 		return this.lowdbService.update<Todo>('id', id, this.collectionName, updateTodoDto);
 	}
 
-	remove(id: string): Promise<string> {
+	async remove(id: string): Promise<string> {
+		const tasks = await this.taskService.find(id);
+		const ids = tasks.map((task) => task.id);
+		await this.taskService.removeMany(ids);
 		return this.lowdbService.remove(id, this.collectionName);
 	}
 }

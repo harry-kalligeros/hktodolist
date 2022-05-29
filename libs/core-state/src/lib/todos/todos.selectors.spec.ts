@@ -4,6 +4,7 @@ import * as TodosSelectors from './todos.selectors';
 import { initialState as initialTasksState, tasksAdapter, TasksPartialState } from '../tasks/tasks.reducer';
 import { createTasksEntity } from '../tasks/tasks.selectors.spec';
 import { AppState } from '../reducers';
+import * as TasksSelectors from '../tasks/tasks.selectors';
 
 describe('Todos Selectors', () => {
 	const ERROR_MSG = 'No Error Available';
@@ -28,6 +29,7 @@ describe('Todos Selectors', () => {
 					selectedId: 'TODO-BBB',
 					error: ERROR_MSG,
 					loaded: true,
+					viewMode: 'edit',
 				}
 			),
 		};
@@ -91,6 +93,11 @@ describe('Todos Selectors', () => {
 			const result = TodosSelectors.getTasksOfSelectedTodo(appState);
 			expect(result.length).toBe(1);
 			expect(result[0].id).toEqual('TASK-CCC');
+		});
+
+		it('getViewMode() should return the current viewMode', () => {
+			const result = TodosSelectors.getViewMode(state);
+			expect(result).toBe('edit');
 		});
 	});
 });

@@ -102,7 +102,7 @@ export class LowdbService {
 	 */
 	async add<T extends TodoDbItem>(record: any, collectionName: CollectionName): Promise<T> {
 		const items = await this.getItems<T>(collectionName);
-		const item = { id: uuid.v4() as string, ...record };
+		const item = { ...record, id: uuid.v4() as string };
 		items.push(item);
 		await this.db.write();
 		return item;
@@ -114,6 +114,14 @@ export class LowdbService {
 		items.splice(index, 1);
 		await this.db.write();
 		return id;
+	}
+
+	async removeMany<T extends TodoDbItem>(ids: string[], collectionName: CollectionName): Promise<string[]> {
+		const items = await this.getItems<T>(collectionName);
+		const newItems: T[] = items.filter((item: T) => !ids.includes(item.id));
+		this.db.data = { ...this.db.data, [collectionName]: newItems };
+		await this.db.write();
+		return ids;
 	}
 
 	/**

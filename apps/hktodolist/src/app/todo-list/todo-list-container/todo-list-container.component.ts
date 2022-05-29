@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FullTodo, Task, Todo, ViewMode } from '@hktodolist/api-interfaces';
+import { FullTodo, Task, Todo, ViewMode, UpsertPayload, Facade, DeletePayload } from '@hktodolist/api-interfaces';
 import { Observable } from 'rxjs';
 import { TasksFacade, TodosFacade } from '@hktodolist/core-state';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
@@ -39,6 +39,7 @@ export class TodoListContainerComponent implements OnInit {
 	selectTodoHandler(id: string) {
 		this.todosFacade.selectTodo(id);
 	}
+
 	selectTaskHandler(id: string) {
 		this.tasksFacade.selectTask(id);
 	}
@@ -46,8 +47,61 @@ export class TodoListContainerComponent implements OnInit {
 	toggleViewMode(mode: ViewMode, type: 'todo' | 'task') {
 		if (type === 'todo') {
 			this.todosFacade.toggleViewMode(mode);
+			if (mode === 'add') {
+				this.todosFacade.selectTodo('');
+			}
 		} else {
+			if (mode === 'add') {
+				this.tasksFacade.selectTask('');
+			}
 			this.tasksFacade.toggleViewMode(mode);
+		}
+	}
+
+	upsert(payload: UpsertPayload) {
+		const { viewMode, item } = payload;
+		const facade = this.getFacade(item);
+		switch (viewMode) {
+			case 'add':
+				facade.addItem(item);
+				break;
+			case 'edit':
+				facade.updateItem(item);
+				break;
+		}
+	}
+
+	delete(payload: DeletePayload) {
+		const { type, id } = payload;
+		const facade = this.getFacadeByType(type);
+		facade.deleteItem(id);
+	}
+
+	/**
+	 * Returns the proper facade based on a TS type guard
+	 * @param item
+	 * @private
+	 */
+	private getFacade(item: Task | Todo): Facade<Todo | Task> {
+		if ('todoId' in item) {
+			// it is a task
+			return this.tasksFacade as Facade<Todo | Task>;
+		} else {
+			return this.todosFacade as Facade<Todo | Task>;
+		}
+	}
+
+	/**
+	 * Returns the proper facade based on the item type
+	 * @param item
+	 * @private
+	 */
+	private getFacadeByType(type: 'todo' | 'task'): Facade<Todo | Task> {
+		if (type === 'task') {
+			// it is a task
+			return this.tasksFacade as Facade<Todo | Task>;
+		} else {
+			return this.todosFacade as Facade<Todo | Task>;
 		}
 	}
 }

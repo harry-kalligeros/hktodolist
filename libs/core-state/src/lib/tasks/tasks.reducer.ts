@@ -3,7 +3,9 @@ import { Action, createReducer, on } from '@ngrx/store';
 
 import * as TasksActions from './tasks.actions';
 import { TasksEntity } from './tasks.models';
-import { ViewMode } from '@hktodolist/api-interfaces';
+import { Task, ViewMode } from '@hktodolist/api-interfaces';
+import * as TodosActions from '../todos/todos.actions';
+import { todosAdapter } from '../todos/todos.reducer';
 
 export const TASKS_FEATURE_KEY = 'tasks';
 
@@ -33,7 +35,17 @@ const tasksReducer = createReducer(
 	on(TasksActions.selectTask, (state, { id }) => ({ ...state, selectedId: id })),
 	on(TasksActions.loadTasksSuccess, (state, { tasks }) => tasksAdapter.setAll(tasks, { ...state, loaded: true })),
 	on(TasksActions.loadTasksFailure, (state, { error }) => ({ ...state, error })),
-	on(TasksActions.toggleViewMode, (state, { viewMode }) => ({ ...state, viewMode }))
+	on(TasksActions.toggleViewMode, (state, { viewMode }) => ({ ...state, viewMode })),
+	on(TasksActions.taskAddedSuccess, (state, { task }) => tasksAdapter.addOne(task, state)),
+	on(TasksActions.taskUpdatedSuccess, (state, { task }) => tasksAdapter.setOne(task, state)),
+	on(TasksActions.taskDeletedSuccess, (state, { id }) => tasksAdapter.removeOne(id, state)),
+	on(TodosActions.todoDeletedSuccess, (state, { id }) => {
+		const ids = Object.entries(state?.entities)
+			.map((entry: [string, Task | undefined]) => entry[1])
+			.filter((task: Task | undefined) => task?.todoId === id)
+			.map((task: Task | undefined) => task?.id);
+		return tasksAdapter.removeMany(ids as string[], state);
+	})
 );
 
 export function reducer(state: State | undefined, action: Action) {

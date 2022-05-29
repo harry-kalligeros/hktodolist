@@ -28,5 +28,53 @@ export class TodosEffects {
 		)
 	);
 
+	addTodo$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(TodosActions.addTodo),
+			fetch({
+				run: (action) => {
+					return this.todosService
+						.add(action.todo)
+						.pipe(map((todo) => TodosActions.todoAddedSuccess({ todo })));
+				},
+				onError: (action, error) => {
+					return TodosActions.todoAddedFailure({ error });
+				},
+			})
+		)
+	);
+
+	updateTodo$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(TodosActions.setTodo),
+			fetch({
+				run: (action) => {
+					return this.todosService
+						.update(action.todo)
+						.pipe(map((todo) => TodosActions.todoUpdatedSuccess({ todo })));
+				},
+				onError: (action, error) => {
+					return TodosActions.todoUpdatedFailure({ error });
+				},
+			})
+		)
+	);
+
+	deleteTodo$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(TodosActions.deleteTodo),
+			fetch({
+				run: (action) => {
+					return this.todosService
+						.delete(action.id)
+						.pipe(map(({ id }) => TodosActions.todoDeletedSuccess({ id })));
+				},
+				onError: (action, error) => {
+					return TodosActions.todoDeletedFailure({ error });
+				},
+			})
+		)
+	);
+
 	constructor(private readonly actions$: Actions, private readonly todosService: TodosService) {}
 }

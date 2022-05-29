@@ -1,20 +1,32 @@
-<form [formGroup]="todoFormGroup" *ngIf="viewMode==='edit'||viewMode==='add'">
-  <div class="field">
-    <label class="label">Name</label>
-    <div class="control"><input type="text" class="input" formControlName="name" placeholder="Fill in your {{itemType}} name"></div>
+<div class="card mt-4" *ngIf="viewMode==='edit'||viewMode==='add'">
+  <header class="card-header is-justify-content-flex-end has-background-white">
+    <button class="card-header-icon" aria-label="close">
+      <a class="icon" (click)="cancel.emit();false">
+        <fa-icon [icon]="faTimesCircle"></fa-icon>
+      </a>
+    </button>
+  </header>
+  <div class="card-content">
+    <form [formGroup]="itemFormGroup">
+      <div class="field">
+        <label class="label">Name</label>
+        <div class="control"><input type="text" class="input" formControlName="name" placeholder="Fill in your {{itemType}} name"></div>
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Fill in your {{itemType}} description" formControlName="description"></textarea>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-primary" (click)="upsertHandler()">{{actionType}} {{itemType}}</button>
+        </div>
+        <div class="control">
+          <button class="button is-link is-light" (click)="cancel.emit()">Cancel</button>
+        </div>
+      </div>
+    </form>
   </div>
-  <div class="field">
-    <label class="label">Description</label>
-    <div class="control">
-      <textarea class="textarea" placeholder="Fill in your {{itemType}} description" formControlName="description"></textarea>
-    </div>
-  </div>
-  <div class="field is-grouped">
-    <div class="control">
-      <button class="button is-primary">{{actionType}} {{itemType}}</button>
-    </div>
-    <div class="control">
-      <button class="button is-link is-light">Cancel</button>
-    </div>
-  </div>
-</form>
+</div>
+

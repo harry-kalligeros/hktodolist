@@ -1,7 +1,17 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	OnInit,
+	Output,
+	SimpleChanges,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ItemFormService } from './item-form.service';
-import { Todo, ViewMode } from '@hktodolist/api-interfaces';
+import { Todo, Task, UpsertPayload, ViewMode } from '@hktodolist/api-interfaces';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'hk-todo-form',
@@ -11,27 +21,55 @@ import { Todo, ViewMode } from '@hktodolist/api-interfaces';
 	providers: [ItemFormService],
 })
 export class ItemFormComponent implements OnInit, OnChanges {
-	todoFormGroup: FormGroup;
+	itemFormGroup: FormGroup;
 	actionType: 'Add' | 'Save' = 'Add';
+	faTimesCircle = faTimesCircle;
 
 	@Input() itemType: 'todo' | 'task' = 'todo';
 	@Input() selectedItem: Todo | Task | null | undefined;
+	@Input() selectedTodoId: string | null | undefined;
 	@Input() viewMode: ViewMode | null | unknown;
+	@Output() cancel = new EventEmitter<void>();
+	@Output() upsert = new EventEmitter<UpsertPayload>();
 
-	constructor(private todoFormService: ItemFormService) {}
+	constructor(private itemFormService: ItemFormService) {}
 
 	ngOnInit() {
-		this.todoFormService.makeForm(this.itemType);
-		this.todoFormGroup = this.todoFormService.itemForm;
+		this.itemFormService.makeForm(this.itemType);
+		this.itemFormGroup = this.itemFormService.itemForm;
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-		const currentItem = changes['selectedItem']?.currentValue;
+		let currentItem = changes['selectedItem']?.currentValue;
+		if (this.itemType === 'task' && this.selectedTodoId) {
+			currentItem = { ...currentItem, todoId: this.selectedTodoId };
+		}
 		if (currentItem) {
-			this.todoFormGroup.setValue(currentItem);
+			this.itemFormGroup.patchValue(currentItem);
+		} else {
+			this.resetForm();
 		}
 
 		const currentViewMode = changes['viewMode']?.currentValue || this.viewMode;
 		this.actionType = currentViewMode === 'edit' ? 'Save' : 'Add';
+	}
+
+	upsertHandler() {
+		const payload: UpsertPayload = {
+			viewMode: this.viewMode as ViewMode,
+			item: this.itemFormGroup.value,
+		};
+		this.upsert.emit(payload);
+		if (this.viewMode === 'add') {
+			this.resetForm();
+		}
+	}
+
+	/**
+	 * Resets the current form
+	 * @private
+	 */
+	private resetForm() {
+		this.itemFormService.resetForm(this.itemType, this.selectedTodoId);
 	}
 }

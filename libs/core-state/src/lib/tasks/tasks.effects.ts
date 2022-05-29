@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { fetch } from '@nrwl/angular';
 
 import * as TasksActions from './tasks.actions';
-import * as TasksFeature from './tasks.reducer';
 import { TasksService } from '@hktodolist/core-data';
 import { map } from 'rxjs';
-import { Task, Todo } from '@hktodolist/api-interfaces';
-import * as TodosActions from '../todos/todos.actions';
+import { Task } from '@hktodolist/api-interfaces';
 
 @Injectable()
 export class TasksEffects {
@@ -24,6 +22,54 @@ export class TasksEffects {
 				onError: (action, error) => {
 					console.error('Error', error);
 					return TasksActions.loadTasksFailure({ error });
+				},
+			})
+		)
+	);
+
+	addTask$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(TasksActions.addTask),
+			fetch({
+				run: (action) => {
+					return this.tasksService
+						.add(action.task)
+						.pipe(map((task) => TasksActions.taskAddedSuccess({ task })));
+				},
+				onError: (action, error) => {
+					return TasksActions.taskAddedFailure({ error });
+				},
+			})
+		)
+	);
+
+	updateTask$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(TasksActions.setTask),
+			fetch({
+				run: (action) => {
+					return this.tasksService
+						.update(action.task)
+						.pipe(map((task) => TasksActions.taskUpdatedSuccess({ task })));
+				},
+				onError: (action, error) => {
+					return TasksActions.taskUpdatedFailure({ error });
+				},
+			})
+		)
+	);
+
+	deleteTask$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(TasksActions.deleteTask),
+			fetch({
+				run: (action) => {
+					return this.tasksService
+						.delete(action.id)
+						.pipe(map(({ id }) => TasksActions.taskDeletedSuccess({ id })));
+				},
+				onError: (action, error) => {
+					return TasksActions.taskDeletedFailure({ error });
 				},
 			})
 		)

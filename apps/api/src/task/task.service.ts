@@ -35,4 +35,8 @@ export class TaskService {
 	remove(id: string) {
 		return this.lowdbService.remove(id, this.collectionName);
 	}
+
+	removeMany(ids: string[]) {
+		return this.lowdbService.removeMany(ids, this.collectionName);
+	}
 }

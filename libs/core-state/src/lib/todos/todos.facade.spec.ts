@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule, Store } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { NxModule } from '@nrwl/angular';
 import { readFirst } from '@nrwl/angular/testing';
 
@@ -9,8 +9,7 @@ import * as TodosActions from './todos.actions';
 import { TodosEffects } from './todos.effects';
 import { TodosFacade } from './todos.facade';
 import { TodosEntity } from './todos.models';
-import { TODOS_FEATURE_KEY, State, initialState, reducer } from './todos.reducer';
-import * as TodosSelectors from './todos.selectors';
+import { reducer, State, TODOS_FEATURE_KEY } from './todos.reducer';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { endpoints, TodosService } from '@hktodolist/core-data';
 import { todos } from '@hktodolist/fixtures';
@@ -101,6 +100,70 @@ describe('TodosFacade', () => {
 
 			expect(list.length).toBe(2);
 			expect(isLoaded).toBe(true);
+		});
+
+		it('selectedTodo() should set the selected task and selectedTodo$ should observe it', async () => {
+			let selectedTodoId = await readFirst(facade.selectedTodoId$);
+			expect(selectedTodoId).toBeNull();
+
+			facade.selectTodo('TODO-ID-1');
+
+			selectedTodoId = await readFirst(facade.selectedTodoId$);
+			expect(selectedTodoId).toBe('TODO-ID-1');
+		});
+
+		it('toggleViewMode() should set the current viewMode and viewMode$ should observe it', async () => {
+			let viewMode = await readFirst(facade.viewMode$);
+			expect(viewMode).toBe('view');
+
+			facade.toggleViewMode('edit');
+			viewMode = await readFirst(facade.viewMode$);
+			expect(viewMode).toBe('edit');
+		});
+
+		it('addItem() should add an item', async () => {
+			store.dispatch(
+				TodosActions.loadTodosSuccess({
+					todos,
+				})
+			);
+			const todo = createTodosEntity('AAA');
+			facade.addItem(todo);
+			const request = httpMock.expectOne(endpoints.TODOS_API);
+			request.flush(todo);
+			const list = await readFirst(facade.allTodos$);
+			expect(list.length).toBe(3);
+			expect(list[2]).toBe(todo);
+		});
+
+		it('updateItem() should update an item', async () => {
+			store.dispatch(
+				TodosActions.loadTodosSuccess({
+					todos,
+				})
+			);
+			const oldTask = todos[0];
+			const todo = { ...todos[0], description: 'new description' };
+			facade.updateItem(todo);
+			const request = httpMock.expectOne(endpoints.TODOS_API + '/' + todo.id);
+			request.flush({ ...oldTask, dataUpdate: todo });
+			const list = await readFirst(facade.allTodos$);
+			expect(list.length).toBe(2);
+			expect(list[0]).toBe(todo);
+		});
+
+		it('deleteItem() should delete an item', async () => {
+			store.dispatch(
+				TodosActions.loadTodosSuccess({
+					todos,
+				})
+			);
+			const todo = todos[0];
+			facade.deleteItem(todo.id);
+			const request = httpMock.expectOne(endpoints.TODOS_API + '/' + todo.id);
+			request.flush(todo.id);
+			const list = await readFirst(facade.allTodos$);
+			expect(list.length).toBe(1);
 		});
 	});
 });

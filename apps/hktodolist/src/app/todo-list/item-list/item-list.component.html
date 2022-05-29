@@ -11,10 +11,10 @@
                (change)="clickTodoHandler($event)">
         <span class="hk-name">{{item.name}}</span>
         <div class="hk-actions">
-          <a class="panel-icon mr-3" (click)="editItem(item.id);false">
+          <a class="panel-icon mr-3" (click)="editItem(item.id);false" [title]="'Edit ' + type">
             <fa-icon [icon]="faPencil" [classes]="['hk-with-hover']"></fa-icon>
           </a>
-          <a class="panel-icon">
+          <a class="panel-icon" (click)="deleteItem(item.id);false" [title]="'Delete ' + type">
             <fa-icon [icon]="faTrash" [classes]="['hk-with-hover']"></fa-icon>
           </a>
           <a class="ml-4 panel-icon px-2" (click)="toggleItem(item.id);false">

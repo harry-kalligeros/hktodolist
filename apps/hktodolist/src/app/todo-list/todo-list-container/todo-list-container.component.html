@@ -5,6 +5,7 @@
                     type="todo"
                     [selectedId]="selectedTodoId$|async"
                     (itemSelected)="selectTodoHandler($event)"
+                    (itemDeleted)="delete($event)"
                     (toggleMode)="toggleViewMode($event, 'todo')"
 
       >
@@ -17,6 +18,7 @@
                     type="task"
                     [selectedId]="selectedTaskId$|async"
                     (itemSelected)="selectTaskHandler($event)"
+                    (itemDeleted)="delete($event)"
                     (toggleMode)="toggleViewMode($event, 'task')"
       >
         <span>for {{(selectedTodo$|async)?.name}}</span>
@@ -27,8 +29,16 @@
 </section>
 <ng-template #editForm let-viewmode$ let-selectedItem$="selectedItem$" let-type="type">
   <ng-container *ngIf="viewmode$|async as viewMode">
-    <hk-todo-form [viewMode]="viewMode" [selectedItem]="selectedItem$|async" [itemType]="type"></hk-todo-form>
-    <button class="button is-primary is-outlined mt-2" *ngIf="viewMode==='view'">
+    <hk-todo-form
+      [viewMode]="viewMode"
+      [selectedItem]="selectedItem$|async"
+      [selectedTodoId]="selectedTodoId$|async"
+      [itemType]="type"
+      (cancel)="toggleViewMode('view', type)"
+      (upsert)="upsert($event)"
+    ></hk-todo-form>
+    <button class="button is-primary is-outlined mt-4"
+            *ngIf="type|showAdd:viewMode:(selectedTodoId$|async)" (click)="toggleViewMode('add', type)">
           <span class="icon">
             <fa-icon [icon]="faPlusCircle"></fa-icon>
           </span>

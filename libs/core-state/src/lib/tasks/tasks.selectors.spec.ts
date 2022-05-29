@@ -1,6 +1,7 @@
 import { TasksEntity } from './tasks.models';
 import { tasksAdapter, TasksPartialState, initialState } from './tasks.reducer';
 import * as TasksSelectors from './tasks.selectors';
+import { getAllTasks, getSelected, getSelectedId, getTasksEntities } from './tasks.selectors';
 
 export const createTasksEntity = (id: string, todoId: string, name = '', description = '') =>
 	({
@@ -29,6 +30,7 @@ describe('Tasks Selectors', () => {
 					selectedId: 'TASK-BBB',
 					error: ERROR_MSG,
 					loaded: true,
+					viewMode: 'edit',
 				}
 			),
 		};
@@ -60,6 +62,21 @@ describe('Tasks Selectors', () => {
 			const result = TasksSelectors.getTasksError(state);
 
 			expect(result).toBe(ERROR_MSG);
+		});
+
+		it('getTasksEntities() should return the current ', () => {
+			const result = TasksSelectors.getTasksEntities(state);
+			expect(result).toEqual(state.tasks.entities);
+		});
+
+		it('getSelectedId() should return the current ', () => {
+			const result = TasksSelectors.getSelectedId(state);
+			expect(result).toBe('TASK-BBB');
+		});
+
+		it('getViewMode() should return the current viewMode', () => {
+			const result = TasksSelectors.getViewMode(state);
+			expect(result).toBe('edit');
 		});
 	});
 });
