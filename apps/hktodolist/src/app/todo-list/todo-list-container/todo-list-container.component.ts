@@ -49,10 +49,12 @@ export class TodoListContainerComponent implements OnInit {
 			this.todosFacade.toggleViewMode(mode);
 			if (mode === 'add') {
 				this.todosFacade.selectTodo('');
+				this.tasksFacade.toggleViewMode('view');
 			}
 		} else {
 			if (mode === 'add') {
 				this.tasksFacade.selectTask('');
+				this.todosFacade.toggleViewMode('view');
 			}
 			this.tasksFacade.toggleViewMode(mode);
 		}

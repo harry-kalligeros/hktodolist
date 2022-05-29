@@ -24,6 +24,7 @@ export class ItemFormComponent implements OnInit, OnChanges {
 	itemFormGroup: FormGroup;
 	actionType: 'Add' | 'Save' = 'Add';
 	faTimesCircle = faTimesCircle;
+	isSubmitted = false;
 
 	@Input() itemType: 'todo' | 'task' = 'todo';
 	@Input() selectedItem: Todo | Task | null | undefined;
@@ -55,6 +56,12 @@ export class ItemFormComponent implements OnInit, OnChanges {
 	}
 
 	upsertHandler() {
+		this.isSubmitted = true;
+
+		if (this.itemFormGroup.invalid) {
+			return;
+		}
+
 		const payload: UpsertPayload = {
 			viewMode: this.viewMode as ViewMode,
 			item: this.itemFormGroup.value,
@@ -63,6 +70,7 @@ export class ItemFormComponent implements OnInit, OnChanges {
 		if (this.viewMode === 'add') {
 			this.resetForm();
 		}
+		this.isSubmitted = false;
 	}
 
 	/**

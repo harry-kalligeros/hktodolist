@@ -7,10 +7,13 @@
     </button>
   </header>
   <div class="card-content">
-    <form [formGroup]="itemFormGroup">
+    <form [formGroup]="itemFormGroup" (submit)="upsertHandler();false">
       <div class="field">
         <label class="label">Name</label>
-        <div class="control"><input type="text" class="input" formControlName="name" placeholder="Fill in your {{itemType}} name"></div>
+        <div class="control">
+          <input type="text" class="input" [class.is-danger]="isSubmitted && itemFormGroup.get('name')?.invalid" formControlName="name" placeholder="Fill in your {{itemType}} name">
+        </div>
+        <p *ngIf="isSubmitted && itemFormGroup.get('name')?.invalid" class="help is-danger">{{itemType|titlecase}} name is required!</p>
       </div>
       <div class="field">
         <label class="label">Description</label>
@@ -20,10 +23,10 @@
       </div>
       <div class="field is-grouped">
         <div class="control">
-          <button class="button is-primary" (click)="upsertHandler()">{{actionType}} {{itemType}}</button>
+          <button class="button is-primary" type="submit">{{actionType}} {{itemType}}</button>
         </div>
         <div class="control">
-          <button class="button is-link is-light" (click)="cancel.emit()">Cancel</button>
+          <button class="button is-link is-light" (click)="cancel.emit();false">Cancel</button>
         </div>
       </div>
     </form>
