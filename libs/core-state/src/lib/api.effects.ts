@@ -47,9 +47,9 @@ export class ApiEffects {
 		this.errorsMap.set(TodosActions.todoAddedSuccess.type, 'Todo added successfully.');
 		this.errorsMap.set(TodosActions.todoUpdatedSuccess.type, 'Todo updated successfully.');
 		this.errorsMap.set(TodosActions.todoDeletedSuccess.type, 'Todo deleted successfully.');
-		this.errorsMap.set(TasksActions.taskAddedSuccess.type, 'Task added successfully');
-		this.errorsMap.set(TasksActions.taskUpdatedSuccess.type, 'Task updated successfully');
-		this.errorsMap.set(TasksActions.taskDeletedSuccess.type, 'Task deleted successfully');
+		this.errorsMap.set(TasksActions.taskAddedSuccess.type, 'Task added successfully.');
+		this.errorsMap.set(TasksActions.taskUpdatedSuccess.type, 'Task updated successfully.');
+		this.errorsMap.set(TasksActions.taskDeletedSuccess.type, 'Task deleted successfully.');
 
 		this.errorsMap.set(TodosActions.loadTodosFailure.type, 'Failed to fetch todos. Please try again!');
 		this.errorsMap.set(TodosActions.todoAddedFailure.type, 'Failed to add todo. Please try again!');

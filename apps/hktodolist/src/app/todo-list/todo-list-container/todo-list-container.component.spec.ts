@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TodoListContainerComponent } from './todo-list-container.component';
 import { TasksFacade, TodosFacade } from '@hktodolist/core-state';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockFacade {
 	init() {}
@@ -18,6 +19,7 @@ describe('TodoListContainerComponent', () => {
 				{ provide: TodosFacade, useClass: MockFacade },
 				{ provide: TasksFacade, useClass: MockFacade },
 			],
+			schemas: [NO_ERRORS_SCHEMA],
 		}).compileComponents();
 	});
 
